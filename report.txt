@@ -1,0 +1,88 @@
+1.
+  In class Game:
+	void play();	// Display the interface
+			// Display piece and start playing
+			// Repeatedly:
+				// Put a piece into the tank, if failed
+					// break
+				// In a particular time interval
+					// Process the keys user enters
+				// Move the piece one row down, if failed
+					// Rest the piece and erase filled rows
+					// and change and display the data
+				// If entering the next level,
+					// Change data
+			// End game
+	
+	bool playOneLevel();	// Return true if rows left <= 0
+
+	void displayStatus();	// Display data
+
+	std::string printNum(int num);	// Generate a 7-char string from a number in
+					// right-justified fashion
+				// An auxiliary function for displayStatus()
+
+	void choosePiece(Piece*& p);	// Choose a random piece
+
+  In class Piece:
+	bool changeOri(Tank& tank);	// Rotate the piece (change orientation) and 
+					// apply changes to the tank
+
+	bool putInTank(Tank& tank) const;// Put the current piece into the tank,
+					// Return false if failed
+
+	void draw(Screen& screen) const;// Draw the next piece in (16, 4)
+	
+	virtual void reside(Tank& tank) const;	// change '#' to '$' in the tank
+						// Foam piece and vapor piece have
+						// overriding functions respectively
+					// Called when the piece cannot fall
+					// further downward
+				// It is made virtual because all other pieces behave
+				// exactly the same except for
+				// foam piece and vapor piece which have special
+				// actions when coming to rest
+
+	bool downShift(Tank& tank);	// Move the piece one row downward and
+					// apply changes to tank
+					// If failed, return false
+
+	virtual bool leftShift(Tank& tank);
+	virtual bool rightShift(Tank& tank);	// These two move the piece one column
+						// left or right respectively
+					// They are made virtual because the crazy piece
+					// has an inverted way of behavior
+
+	virtual char seePiece(int ori, int r, int c) const = 0;	// Get the char in (r, c)
+								// of a specific
+								// orientation
+					// It is made pure virtual because every different
+					// piece has its own pattern
+
+  In class Tank:
+	char bigPic[19][12]; 	// Although not a function, it is rather important,
+				// because it stores all the content of the tank
+
+	Tank(int width, int height);	// Set the boundary with '@'
+
+	void clearTank();	// Empty the tank
+
+	void display(Screen& screen, int x, int y);	// Display the tank with all
+							// the things inside it
+
+	char seePic(int x, int y) const;	// Check what it is in (x, y)
+						// Note: this is the screen coordinate
+
+	void changePic(int x, int y, char c);	// Change the char in (x, y)
+						// Note: this is the screen coordinate
+
+	int rowsFilled();	// Check from bottom up whether any row is filled
+				// Then shift down by the rows filled
+				// and return how many rows have been filled
+
+2.
+  I think I have finished the project.
+
+3. 
+  a. The spec does not elaborate on whether or not to use the next piece displaced in the last level when a new level starts, but after referring to the demo it seems that it generates a new current piece when a new level begins. So I also did it that way.
+  b. The part on how to make recursive calls when implementing the foam piece is rather confusing for me... although I did succeed in finishing it, it does not appear to be really the same code according to the spec.
